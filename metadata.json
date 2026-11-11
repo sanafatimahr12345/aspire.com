@@ -1,0 +1,6 @@
+{
+  "name": "Aspire College Management System",
+  "description": "Comprehensive college management system for Aspire College Sahiwal featuring public portal, admin dashboard, staff, office, and student portals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,76 @@
+{
+  "entities": {
+    "students": {
+      "title": "Students",
+      "description": "Student admission and academic enrollment records",
+      "fields": {
+        "studentId": { "type": "string" },
+        "name": { "type": "string" },
+        "rollNo": { "type": "string" },
+        "fatherName": { "type": "string" },
+        "phone": { "type": "string" },
+        "program": { "type": "string" },
+        "section": { "type": "string" },
+        "feeStatus": { "type": "string" }
+      }
+    },
+    "classes": {
+      "title": "Classes",
+      "description": "Intermediate classes and session cohorts",
+      "fields": {
+        "classId": { "type": "string" },
+        "name": { "type": "string" },
+        "session": { "type": "string" },
+        "studentCount": { "type": "number" }
+      }
+    },
+    "teachers": {
+      "title": "Teachers",
+      "description": "Faculty profiles and subject incharge records",
+      "fields": {
+        "teacherId": { "type": "string" },
+        "name": { "type": "string" },
+        "subject": { "type": "string" },
+        "experience": { "type": "string" },
+        "incharge": { "type": "string" },
+        "campus": { "type": "string" }
+      }
+    },
+    "attendance": {
+      "title": "Attendance",
+      "description": "Daily student and staff attendance records",
+      "fields": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "rollNo": { "type": "string" },
+        "date": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "fees": {
+      "title": "Fees",
+      "description": "Fee vouchers, payments and dues",
+      "fields": {
+        "feeId": { "type": "string" },
+        "rollNo": { "type": "string" },
+        "month": { "type": "string" },
+        "totalFee": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "remainingAmount": { "type": "number" },
+        "status": { "type": "string" }
+      }
+    },
+    "results": {
+      "title": "Results",
+      "description": "Student marks and term examination results",
+      "fields": {
+        "resultId": { "type": "string" },
+        "rollNo": { "type": "string" },
+        "examTitle": { "type": "string" },
+        "obtainedMarks": { "type": "number" },
+        "totalMarks": { "type": "number" },
+        "percentage": { "type": "number" }
+      }
+    }
+  }
+}
