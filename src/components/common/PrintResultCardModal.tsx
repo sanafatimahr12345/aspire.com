@@ -112,7 +112,10 @@ export const PrintResultCardModal: React.FC<PrintResultCardModalProps> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
-                  {result.subjects.map((subj, idx) => (
+                  {(result.subjects && result.subjects.length > 0 
+                    ? result.subjects 
+                    : [{ subjectName: result.examTitle, subjectCode: 'TEST', totalMarks: result.totalMarks, obtainedMarks: result.obtainedMarks, grade: result.grade }]
+                  ).map((subj, idx) => (
                     <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
                       <td className="py-2 px-3 font-mono text-slate-500">{subj.subjectCode}</td>
                       <td className="py-2 px-3 font-medium text-slate-900">{subj.subjectName}</td>

@@ -40,6 +40,7 @@ import {
   StudentPortalView 
 } from './components/portals/RolePortals';
 import { TeacherPortal } from './components/portals/TeacherPortal';
+import { LoginSettingsView } from './components/auth/LoginSettingsView';
 import { FirebaseSync } from './services/firebase';
 
 export default function App() {
@@ -98,15 +99,26 @@ export default function App() {
 
   // Handle direct teacher portal login from footer
   const handleSelectTeacher = (teacherName: string) => {
+    const creds = StorageService.getPortalCredentials();
+    const credMatch = creds.find(c => 
+      c.name.toLowerCase().includes(teacherName.toLowerCase()) || 
+      teacherName.toLowerCase().includes(c.name.toLowerCase()) ||
+      c.portalName.toLowerCase().includes(teacherName.toLowerCase())
+    );
+
     const teachers = StorageService.getTeachers();
-    const matched = teachers.find(t => t.name.toLowerCase().includes(teacherName.toLowerCase()) || teacherName.toLowerCase().includes(t.name.toLowerCase()));
+    const matched = teachers.find(t => 
+      t.name.toLowerCase().includes(teacherName.toLowerCase()) || 
+      teacherName.toLowerCase().includes(t.name.toLowerCase())
+    );
+
     const u: User = {
-      id: matched?.teacherId || 'ASP-TCH-ZAHID',
-      username: 'staff',
-      name: matched?.name || teacherName,
-      email: matched?.email || 'zahid.ramzan@aspire.edu.pk',
+      id: credMatch?.teacherOrStudentId || matched?.teacherId || 'ASP-TCH-01',
+      username: credMatch?.username || 'staff',
+      name: credMatch?.name || matched?.name || teacherName,
+      email: credMatch?.email || matched?.email || 'zahid.ramzan@aspire.edu.pk',
       role: 'staff',
-      relatedId: matched?.teacherId || 'ASP-TCH-ZAHID',
+      relatedId: credMatch?.teacherOrStudentId || matched?.teacherId || 'ASP-TCH-01',
     };
     StorageService.setCurrentUser(u);
     setCurrentUser(u);
@@ -297,6 +309,8 @@ export default function App() {
         return <AuditLogsView />;
       case 'backup':
         return <BackupRecoveryView />;
+      case 'login-settings':
+        return <LoginSettingsView />;
       default:
         return <AdminDashboardHome onNavigate={setCurrentTab} />;
     }

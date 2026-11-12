@@ -10,6 +10,19 @@ export interface User {
   relatedId?: string; // Teacher ID or Student ID or Employee ID
 }
 
+export interface PortalCredential {
+  id: string;
+  name: string;
+  role: UserRole;
+  username: string;
+  email: string;
+  password: string;
+  teacherOrStudentId: string;
+  portalName: string;
+  subject?: string;
+  campus?: string;
+}
+
 export interface Session {
   sessionId: string;
   sessionName: string;
@@ -183,9 +196,12 @@ export interface Expense {
 export interface Exam {
   examId: string;
   title: string;
-  term: 'First Term' | 'Mid-Term' | 'Pre-Board / Send-up' | 'Annual Board Trial';
+  term: 'First Term' | 'Mid-Term' | 'Pre-Board / Send-up' | 'Annual Board Trial' | 'Class Test' | 'Monthly Test' | string;
   sessionId: string;
   classId: string;
+  sectionId?: string;
+  subject?: string;
+  totalMarks?: number;
   startDate: string;
   endDate: string;
   status: 'Upcoming' | 'In Progress' | 'Completed';
@@ -208,7 +224,9 @@ export interface ExamResult {
   studentName: string;
   fatherName: string;
   classId: string;
+  sectionId?: string;
   program: string;
+  subject?: string;
   subjects: SubjectMarkEntry[];
   totalMarks: number;
   obtainedMarks: number;

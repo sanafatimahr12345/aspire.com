@@ -55,6 +55,7 @@ export type AdminViewTab =
   | 'gallery'
   | 'audit'
   | 'backup'
+  | 'login-settings'
   // Staff Portal Tabs
   | 'staff-classes'
   | 'staff-assignments'
@@ -446,8 +447,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             {/* Yellow / Red Pill Button: Login Settings */}
             <div className="pt-1">
               <button
-                onClick={() => handleNavClick('audit')}
-                className="w-full py-1.5 px-3 rounded-lg border border-red-200 bg-red-50/40 hover:bg-red-50 text-[#800000] font-bold text-[11px] flex items-center justify-center gap-1.5 transition-colors"
+                onClick={() => handleNavClick('login-settings')}
+                className={`w-full py-1.5 px-3 rounded-lg border text-xs font-bold flex items-center justify-center gap-1.5 transition-colors ${
+                  currentTab === 'login-settings'
+                    ? 'bg-[#800000] text-white border-[#800000] shadow-xs'
+                    : 'border-red-200 bg-red-50/50 hover:bg-red-50 text-[#800000]'
+                }`}
               >
                 <span>🔐 Login Settings</span>
               </button>
@@ -582,6 +587,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 {[
                   { id: 'audit', label: 'Audit Logs' },
                   { id: 'backup', label: 'Backup & Recovery' },
+                  { id: 'login-settings', label: 'Login Credentials' },
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -601,8 +607,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             {/* Another Login Settings Button */}
             <div className="pt-1">
               <button
-                onClick={() => handleNavClick('audit')}
-                className="w-full py-1.5 px-3 rounded-lg border border-red-200 bg-red-50/40 hover:bg-red-50 text-[#800000] font-bold text-[11px] flex items-center justify-center gap-1.5 transition-colors"
+                onClick={() => handleNavClick('login-settings')}
+                className={`w-full py-1.5 px-3 rounded-lg border text-xs font-bold flex items-center justify-center gap-1.5 transition-colors ${
+                  currentTab === 'login-settings'
+                    ? 'bg-[#800000] text-white border-[#800000] shadow-xs'
+                    : 'border-red-200 bg-red-50/50 hover:bg-red-50 text-[#800000]'
+                }`}
               >
                 <span>🔐 Login Settings</span>
               </button>

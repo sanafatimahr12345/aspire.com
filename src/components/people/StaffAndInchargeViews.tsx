@@ -17,7 +17,8 @@ import {
   MapPin, 
   Calendar, 
   Award,
-  Users
+  Users,
+  Upload
 } from 'lucide-react';
 
 /* -------------------------------------------------------------
@@ -848,6 +849,23 @@ export const InchargeView: React.FC = () => {
   const [phone, setPhone] = useState('923049562722');
   const [photo, setPhoto] = useState('');
   const [program, setProgram] = useState('FSc Pre-Medical');
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image file size must be less than 5MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          setPhoto(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   const [classId, setClassId] = useState(classes[0]?.classId || '');
   const [sectionId, setSectionId] = useState('G1');
   const [group, setGroup] = useState('Medical 1st Year');
@@ -1225,14 +1243,58 @@ export const InchargeView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Photo Image URL or Path (Optional)</label>
-                <input
-                  type="text"
-                  value={photo}
-                  onChange={(e) => setPhoto(e.target.value)}
-                  placeholder="/assets/aistudio/... or https://..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono"
-                />
+                <label className="block font-semibold text-slate-700 mb-1.5">
+                  Incharge Photo (Upload from PC / Computer)
+                </label>
+                {photo ? (
+                  <div className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                    <img
+                      src={photo}
+                      alt="Uploaded Incharge"
+                      className="w-12 h-12 rounded-full object-cover ring-2 ring-amber-400 border border-white shadow-xs shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-slate-800 truncate">Photo Selected from PC</p>
+                      <p className="text-[10px] text-emerald-600 font-semibold">Ready to save with record</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <label className="px-2.5 py-1 text-xs font-semibold bg-white hover:bg-slate-100 border border-slate-300 rounded-lg text-slate-700 cursor-pointer transition-colors shadow-2xs">
+                        Change
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={handlePhotoUpload}
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setPhoto('')}
+                        className="px-2.5 py-1 text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-300 hover:border-[#800000] bg-slate-50 hover:bg-amber-50/20 rounded-xl cursor-pointer transition-all group">
+                    <div className="w-10 h-10 rounded-full bg-slate-100 group-hover:bg-[#800000]/10 flex items-center justify-center text-slate-600 group-hover:text-[#800000] mb-1.5 transition-colors">
+                      <Upload className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-[#800000]">
+                      📁 Choose Image from PC / Computer
+                    </span>
+                    <span className="text-[10px] text-slate-400 mt-0.5">
+                      Select photo directly from your device (PNG, JPG, JPEG, WEBP)
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handlePhotoUpload}
+                    />
+                  </label>
+                )}
               </div>
 
               <div>

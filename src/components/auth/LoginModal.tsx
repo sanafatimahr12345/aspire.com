@@ -52,6 +52,23 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       return;
     }
 
+    // 1. Check dynamic portal credentials configured in Login Settings
+    const dynamicCred = StorageService.authenticate(cleanUser, cleanPass, selectedRole);
+    if (dynamicCred) {
+      const user: User = {
+        id: dynamicCred.teacherOrStudentId || dynamicCred.id,
+        username: dynamicCred.username,
+        name: dynamicCred.name,
+        email: dynamicCred.email,
+        role: dynamicCred.role,
+        relatedId: dynamicCred.teacherOrStudentId || dynamicCred.id,
+      };
+      StorageService.setCurrentUser(user);
+      StorageService.logAction(user.username, user.role, 'User Logged In', `${user.name} logged in to ${dynamicCred.portalName}`);
+      onLoginSuccess(user);
+      return;
+    }
+
     // Role-specific verification
     if (selectedRole === 'admin') {
       if ((cleanUser === 'admin' || cleanUser === 'principal') && cleanPass === 'admin123') {
@@ -261,6 +278,31 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 Student (101 / student123)
               </button>
             </div>
+
+            {selectedRole === 'staff' && (
+              <div className="mt-2.5 pt-2 border-t border-slate-200">
+                <span className="text-[11px] font-bold text-slate-600 block mb-1.5">
+                  Select Teacher Portal (Kacha Khuh Campus):
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {StorageService.getPortalCredentials().filter(c => c.role === 'staff').map((cred) => (
+                    <button
+                      key={cred.id}
+                      type="button"
+                      onClick={() => {
+                        setUsername(cred.email || cred.username);
+                        setPassword(cred.password);
+                        setError('');
+                      }}
+                      className="px-2 py-1 text-[10px] bg-slate-100 hover:bg-[#800000] hover:text-white border border-slate-200 rounded font-semibold text-slate-700 transition-colors"
+                      title={`${cred.name} (${cred.email})`}
+                    >
+                      {cred.name.replace('Prof. ', '')}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {error && (

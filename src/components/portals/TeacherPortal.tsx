@@ -102,16 +102,18 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
 
   // Add Result state
   const [resultStudentRoll, setResultStudentRoll] = useState(classStudents[0]?.rollNo || 'F26ENG1BA2');
-  const [examName, setExamName] = useState('First Term Assessment 2026');
-  const [phyMarks, setPhyMarks] = useState<number>(85);
+  const [examName, setExamName] = useState('Physics Chapter 1 Test');
+  const [totalMarks, setTotalMarks] = useState<number>(50);
+  const [phyMarks, setPhyMarks] = useState<number>(45);
   const [resultSaved, setResultSaved] = useState(false);
 
   const handleSaveResult = (e: React.FormEvent) => {
     e.preventDefault();
     const student = allStudents.find(s => s.rollNo === resultStudentRoll) || classStudents[0];
     const results = StorageService.getResults();
+    const pct = Math.round((Number(phyMarks) / (Number(totalMarks) || 1)) * 1000) / 10;
     const calculatedGrade: 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' = 
-      phyMarks >= 80 ? 'A+' : phyMarks >= 70 ? 'A' : phyMarks >= 60 ? 'B' : phyMarks >= 50 ? 'C' : phyMarks >= 33 ? 'D' : 'F';
+      pct >= 85 ? 'A+' : pct >= 75 ? 'A' : pct >= 65 ? 'B' : pct >= 55 ? 'C' : pct >= 33 ? 'D' : 'F';
 
     const newRes = {
       resultId: `RES-TCH-${Date.now().toString().slice(-4)}`,
@@ -124,13 +126,13 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
       classId: selectedClass,
       program: student?.program || 'FSc Pre-Medical',
       subjects: [
-        { subjectName: 'Physics', subjectCode: 'PHY-101', totalMarks: 100, obtainedMarks: Number(phyMarks), grade: calculatedGrade }
+        { subjectName: 'Physics', subjectCode: 'PHY-101', totalMarks: Number(totalMarks), obtainedMarks: Number(phyMarks), grade: calculatedGrade }
       ],
-      totalMarks: 100,
+      totalMarks: Number(totalMarks),
       obtainedMarks: Number(phyMarks),
-      percentage: Number(phyMarks),
+      percentage: pct,
       grade: calculatedGrade,
-      status: (phyMarks >= 33 ? 'Pass' : 'Fail') as 'Pass' | 'Fail',
+      status: (pct >= 33 ? 'Pass' : 'Fail') as 'Pass' | 'Fail',
       position: 'Class Evaluated'
     };
     StorageService.saveResults([newRes, ...results]);
@@ -734,12 +736,14 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-semibold text-slate-700 mb-1">Total Marks</label>
+                    <label className="block font-semibold text-slate-700 mb-1">Total Marks (Full Number) *</label>
                     <input
                       type="number"
-                      disabled
-                      value="100"
-                      className="w-full px-3 py-2 border border-slate-200 bg-slate-100 rounded-lg text-xs text-slate-500"
+                      required
+                      min={5}
+                      value={totalMarks}
+                      onChange={(e) => setTotalMarks(Number(e.target.value))}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono font-bold"
                     />
                   </div>
                   <div>
@@ -748,7 +752,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
                       type="number"
                       required
                       min={0}
-                      max={100}
+                      max={totalMarks}
                       value={phyMarks}
                       onChange={(e) => setPhyMarks(Number(e.target.value))}
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono font-bold text-[#800000]"

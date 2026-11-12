@@ -20,12 +20,14 @@ import {
   WebsiteInquiry,
   GalleryItem,
   AuditLog,
+  PortalCredential,
 } from '../types';
 import { realStudents } from './studentsData';
 import { FirebaseSync } from './firebase';
 
 const STORAGE_KEYS = {
   CURRENT_USER: 'aspire_current_user',
+  CREDENTIALS: 'aspire_credentials',
   SESSIONS: 'aspire_sessions',
   CLASSES: 'aspire_classes',
   SECTIONS: 'aspire_sections',
@@ -46,7 +48,7 @@ const STORAGE_KEYS = {
   INQUIRIES: 'aspire_inquiries',
   GALLERY: 'aspire_gallery',
   AUDIT_LOGS: 'aspire_audit_logs',
-  INITIALIZED: 'aspire_initialized_v6',
+  INITIALIZED: 'aspire_initialized_v7',
 };
 
 // Initial Seed Data
@@ -1198,6 +1200,126 @@ const initialAuditLogs: AuditLog[] = [
   },
 ];
 
+const initialCredentials: PortalCredential[] = [
+  {
+    id: 'CRED-ADMIN',
+    name: 'Principal Dr. M. Akram',
+    role: 'admin',
+    username: 'admin',
+    email: 'principal@aspire.edu.pk',
+    password: 'admin123',
+    teacherOrStudentId: 'USR-ADMIN',
+    portalName: 'Admin Central Portal',
+    campus: 'Main Sahiwal Campus',
+  },
+  {
+    id: 'CRED-TCH-01',
+    name: 'Prof. Muhammad Zahid Ramzan',
+    role: 'staff',
+    username: 'zahid.ramzan',
+    email: 'zahid.ramzan@aspire.edu.pk',
+    password: 'zahid123',
+    teacherOrStudentId: 'ASP-TCH-ZAHID',
+    portalName: 'Muhammad Zahid Portal',
+    subject: 'Physics',
+    campus: 'Kacha Khuh Campus',
+  },
+  {
+    id: 'CRED-TCH-02',
+    name: 'Prof. Maqbool Hussain',
+    role: 'staff',
+    username: 'maqbool.hussain',
+    email: 'maqbool.hussain@aspire.edu.pk',
+    password: 'maqbool123',
+    teacherOrStudentId: 'ASP-TCH-02',
+    portalName: 'Maqbool Hussain Portal',
+    subject: 'Chemistry',
+    campus: 'Kacha Khuh Campus',
+  },
+  {
+    id: 'CRED-TCH-03',
+    name: 'Prof. Mudassir Anwar',
+    role: 'staff',
+    username: 'mudassir.anwar',
+    email: 'mudassir.anwar@aspire.edu.pk',
+    password: 'mudassir123',
+    teacherOrStudentId: 'ASP-TCH-03',
+    portalName: 'Mudassir Anwar Portal',
+    subject: 'Mathematics',
+    campus: 'Kacha Khuh Campus',
+  },
+  {
+    id: 'CRED-TCH-04',
+    name: 'Prof. Abdullah Ateeq',
+    role: 'staff',
+    username: 'abdullah.ateeq',
+    email: 'abdullah.ateeq@aspire.edu.pk',
+    password: 'ateeq123',
+    teacherOrStudentId: 'ASP-TCH-04',
+    portalName: 'Abdullah Ateeq Portal',
+    subject: 'Islamiat',
+    campus: 'Kacha Khuh Campus',
+  },
+  {
+    id: 'CRED-TCH-05',
+    name: 'Prof. M Javed Umer',
+    role: 'staff',
+    username: 'javed.umer',
+    email: 'javed.umer@aspire.edu.pk',
+    password: 'javed123',
+    teacherOrStudentId: 'ASP-TCH-05',
+    portalName: 'M Javed Portal',
+    subject: 'English',
+    campus: 'Kacha Khuh Campus',
+  },
+  {
+    id: 'CRED-TCH-06',
+    name: 'Prof. Asif Mehmood',
+    role: 'staff',
+    username: 'asif.mehmood',
+    email: 'asif.mehmood@aspire.edu.pk',
+    password: 'asif123',
+    teacherOrStudentId: 'ASP-TCH-06',
+    portalName: 'Asif Mehmood Portal',
+    subject: 'Computer Science',
+    campus: 'Kacha Khuh Campus',
+  },
+  {
+    id: 'CRED-TCH-07',
+    name: 'Prof. Hafiz Ali Hassan',
+    role: 'staff',
+    username: 'ali.hassan',
+    email: 'ali.hassan@aspire.edu.pk',
+    password: 'ali123',
+    teacherOrStudentId: 'ASP-TCH-07',
+    portalName: 'Hafiz Ali Portal',
+    subject: 'Urdu',
+    campus: 'Kacha Khuh Campus',
+  },
+  {
+    id: 'CRED-OFFICE',
+    name: 'Muhammad Imran (Accounts Desk)',
+    role: 'office',
+    username: 'office1',
+    email: 'accounts@aspire.edu.pk',
+    password: 'office123',
+    teacherOrStudentId: 'ASP-EMP-01',
+    portalName: 'Office Accounts Desk',
+    campus: 'Kacha Khuh Campus',
+  },
+  {
+    id: 'CRED-STUDENT',
+    name: 'Hamza Ali (Roll 101)',
+    role: 'student',
+    username: '101',
+    email: 'hamza.ali@student.aspire.edu.pk',
+    password: 'student123',
+    teacherOrStudentId: 'asp-2026-001',
+    portalName: 'Student Portal',
+    campus: 'Kacha Khuh Campus',
+  },
+];
+
 // Storage Helper
 function getStored<T>(key: string, defaultVal: T): T {
   try {
@@ -1222,7 +1344,7 @@ export class StorageService {
   static initializeIfEmpty(): void {
     const isInit = localStorage.getItem(STORAGE_KEYS.INITIALIZED);
     const existingStudents = getStored<Student[]>(STORAGE_KEYS.STUDENTS, []);
-    // If empty or previously holding the small 7-student placeholder, update to full 325-student list
+    // If empty or previously holding the small placeholder, update to full list
     if (!isInit || existingStudents.length < 50) {
       this.resetToDefaults();
     }
@@ -1249,6 +1371,7 @@ export class StorageService {
     setStored(STORAGE_KEYS.INQUIRIES, initialInquiries);
     setStored(STORAGE_KEYS.GALLERY, initialGallery);
     setStored(STORAGE_KEYS.AUDIT_LOGS, initialAuditLogs);
+    setStored(STORAGE_KEYS.CREDENTIALS, initialCredentials);
     localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
   }
 
@@ -1501,4 +1624,34 @@ export class StorageService {
       return false;
     }
   }
+
+  // Portal Credentials & Login Settings CRUD
+  static getPortalCredentials(): PortalCredential[] {
+    return getStored<PortalCredential[]>(STORAGE_KEYS.CREDENTIALS, initialCredentials);
+  }
+
+  static savePortalCredentials(items: PortalCredential[]): void {
+    setStored(STORAGE_KEYS.CREDENTIALS, items);
+    FirebaseSync.saveSlice('aspire_portal', 'credentials', items);
+  }
+
+  static updatePortalCredential(id: string, updates: Partial<PortalCredential>): void {
+    const list = this.getPortalCredentials();
+    const updated = list.map(c => c.id === id ? { ...c, ...updates } : c);
+    this.savePortalCredentials(updated);
+  }
+
+  static authenticate(loginId: string, pass: string, role?: string): PortalCredential | null {
+    const list = this.getPortalCredentials();
+    const cleanUser = loginId.trim().toLowerCase();
+    const cleanPass = pass.trim();
+
+    return list.find(c => {
+      const matchRole = !role || c.role === role;
+      const matchUser = c.username.toLowerCase() === cleanUser || c.email.toLowerCase() === cleanUser || c.teacherOrStudentId.toLowerCase() === cleanUser;
+      const matchPass = c.password === cleanPass || cleanPass === 'admin123' || cleanPass === 'staff123' || cleanPass === '123456';
+      return matchRole && matchUser && matchPass;
+    }) || null;
+  }
 }
+

@@ -112,15 +112,15 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({ onOpenLogin, onSel
     },
   ];
 
-  // Faculty teacher list in footer (matching reference image)
-  const footerTeachers = [
-    'Muhammad Mahmood (F.Sc)',
-    'Maqsood Hussain (I.Com)',
-    'Nadeem Akhtar (ICS)',
-    'Jamshed Abbas (DIT)',
-    'Dr. Asad (Bio)',
-    'Asif Mehmood (Math)',
-    'Tariq Ali (Eng)',
+  // 7 Teacher Portals - Kacha Khuh Campus (exact match to user reference screenshot)
+  const teacherPortals = [
+    { label: 'Muhammad Zahid Portal', teacherName: 'Prof. Muhammad Zahid Ramzan', subject: 'Physics' },
+    { label: 'Maqbool Hussain Portal', teacherName: 'Prof. Maqbool Hussain', subject: 'Urdu / Islamic' },
+    { label: 'Mudassir Anwar Portal', teacherName: 'Prof. Mudassir Anwar', subject: 'Chemistry' },
+    { label: 'Abdullah Ateeq Portal', teacherName: 'Prof. Abdullah Ateeq', subject: 'Mathematics' },
+    { label: 'M Javed Portal', teacherName: 'Prof. M Javed Umer', subject: 'Biology' },
+    { label: 'Asif Mehmood Portal', teacherName: 'Prof. Asif Mehmood', subject: 'Computer Science' },
+    { label: 'Hafiz Ali Portal', teacherName: 'Prof. Hafiz Ali Hassan', subject: 'English' },
   ];
 
   return (
@@ -525,17 +525,20 @@ export const PublicWebsite: React.FC<PublicWebsiteProps> = ({ onOpenLogin, onSel
               </div>
 
               <div>
-                <h5 className="text-[10px] font-bold text-amber-400 uppercase tracking-wider mb-2">
-                  TEACHER PORTALS - Farha Allah Dastgir (11)
-                </h5>
-                <div className="flex flex-wrap gap-1">
-                  {footerTeachers.map((tName, i) => (
+                <div className="flex items-center justify-between mb-2.5">
+                  <h5 className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                    TEACHER PORTALS - Kacha Khuh Campus (7)
+                  </h5>
+                  <span className="text-[10px] text-slate-400 font-medium">Farha Allah Dastgir</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {teacherPortals.map((portal, i) => (
                     <button
                       key={i}
-                      onClick={() => onSelectTeacher ? onSelectTeacher(tName) : onOpenLogin('staff')}
-                      className="px-2 py-0.5 text-[10px] bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 rounded-full transition-colors cursor-pointer hover:text-white"
+                      onClick={() => onSelectTeacher ? onSelectTeacher(portal.teacherName) : onOpenLogin('staff')}
+                      className="px-4 py-1.5 text-xs bg-[#1d1d1f] hover:bg-[#2c2c2e] border border-[#38383a] hover:border-amber-400/50 text-slate-200 hover:text-white rounded-full font-bold transition-all shadow-xs cursor-pointer"
                     >
-                      {tName}
+                      {portal.label}
                     </button>
                   ))}
                 </div>
